@@ -26,26 +26,7 @@ public class Main {
                 num = Integer.parseInt(userInput);
                 switch (num){
                     case 1:
-                        Scanner details = new Scanner(System.in);
-                        //getting user inputs for Artist
-                        System.out.print("Enter Artist ID: ");
-                        String id = details.nextLine();
-                        System.out.print("Enter Artist Name: ");
-                        String name = details.nextLine();
-                        System.out.print("Enter Address (City|State|Country): ");
-                        String address = details.nextLine();
-                        System.out.print("Enter artist birthdate (DD-MM-YYYY): ");
-                        String birthdate = details.nextLine();
-                        System.out.print("Enter Artist Bio: ");
-                        String bio = details.nextLine();
-                        System.out.print("Enter Artist Occupations (Ex: Singer|Songwriter): ");
-                        ArrayList<String> occupations = new ArrayList<>(Arrays.asList(details.nextLine()));
-                        System.out.print("Enter Artist Genres (Ex: pop|classical): ");
-                        ArrayList<String> genres = new ArrayList<>(Arrays.asList(details.nextLine()));
-                        System.out.print("Enter Artist Awards (Format: Year|Title): ");
-                        ArrayList<String> awards = new ArrayList<>(Arrays.asList(details.nextLine()));
-                        Artist artist = new Artist(id,name,address,birthdate,bio,occupations,genres,awards);
-                        boolean isAdded = artist.addArtist();
+                        boolean isAdded = Artist.addArtist();
                         if(isAdded){
                             System.out.println("Artist Successfully Added");
                         }else {
@@ -53,7 +34,11 @@ public class Main {
                         }
                         break;
                     case 2:
-                        System.out.println("Update Artist");break;
+                        if(Artist.updateArtist()){
+                            System.out.println("Artist updated sucessfully");
+                        }else {
+                            System.out.println("Artist update failed");
+                        }break;
                     case 3:
                         Artist.displayAllArtists();break;
                     case 4: System.out.println("Thanks for using Social Media Analyzer");break;
@@ -67,7 +52,7 @@ public class Main {
                 System.out.println(e.getMessage());
                 num = 0;
             }
-        }while (num != 3);
+        }while (num != 4);
     }
 }
 //Added a seperate exception handling for the menu
