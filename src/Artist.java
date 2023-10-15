@@ -156,13 +156,20 @@ public class Artist {
             if (!checkOccupations) System.out.println("Wrong occupation format");
         }while (!checkOccupations);
 
-        ArrayList<String> genres;
+        ArrayList<String> genres = null;
+        String genreString;
         boolean checkGenres;
         do {
             System.out.print("Enter Artist Genres (Ex: pop|classical): ");
-            genres = new ArrayList<>(Arrays.asList(details.nextLine()));
-            checkGenres = Artist.checkGenres(genres);
-            if (!checkGenres) System.out.println("Wrong genre format");
+            genreString = details.nextLine();
+            //genres = new ArrayList<>(Arrays.asList(details.nextLine()));
+            checkGenres = Artist.checkGenres(genreString);
+            //checkGenres = Artist.checkGenres(genres);
+            if (!checkGenres) {
+                System.out.println("Wrong genre format");
+            }else {
+                genres = new ArrayList<>(Arrays.asList(genreString.split("\\|")));
+            }
         }while (!checkGenres);
 
         ArrayList<String> awards = null;
@@ -259,8 +266,22 @@ public class Artist {
         }
         return true;
     }
+    public static boolean checkGenres(String genres){
+        if(genres==null || genres.trim().isEmpty()){
+            return false;
+        }
+        String[] checkGenres = genres.split("\\|");
+        if(checkGenres.length < 2 || checkGenres.length > 5){
+            return false;
+        }
+        List<String> genreList = Arrays.asList(checkGenres);
+        if(genreList.contains("pop") && genreList.contains("rock")){
+            return false;
+        }
+        return true;
+    }
 
-    public static boolean checkGenres(ArrayList<String> genres) {
+/*    public static boolean checkGenres(ArrayList<String> genres) {
         if (genres == null || genres.isEmpty()) {
             return false;
         }
@@ -269,13 +290,13 @@ public class Artist {
             if (checkGenres.length < 2 || checkGenres.length > 5) {
                 return false;
             }
-            List<String> genreListAsList = Arrays.asList(genreList);
+            List<String> genreListAsList = Collections.singletonList(genreList);
             if (genreListAsList.contains("pop") && genreListAsList.contains("rock")) {
                 return false;
             }
         }
         return true;
-    }
+    }*/
 
     public static void loadArtistFromFile() {
         String path = "D:\\RMIT\\Sem 2\\SEF\\Assignment\\4\\SEF_MUSIC_APP\\resources\\SEF_Music.txt";
@@ -426,14 +447,16 @@ public class Artist {
 
         //updating genres
         ArrayList<String> newGenres;
+        String newGenreString;
         boolean checkGenres;
         do {
             System.out.print("Enter new Artist Genres (Ex: pop|classical): ");
-            newGenres = new ArrayList<>(Arrays.asList(details.nextLine()));
-            checkGenres = Artist.checkGenres(newGenres);
+            newGenreString = details.nextLine();
+            checkGenres = Artist.checkGenres(newGenreString);
             if (!checkGenres) {
                 System.out.println("Wrong genre format");
             }else {
+                newGenres = new ArrayList<>(Arrays.asList(newGenreString.split("\\|")));
                 searchArtist.setGenres(newGenres);
             }
         }while (!checkGenres);
