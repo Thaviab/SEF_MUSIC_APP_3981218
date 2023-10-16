@@ -14,7 +14,9 @@ public class Artist {
     private ArrayList<String> Awards;
 
     public static ArrayList<Artist> artistsList = new ArrayList<>();
-    public Artist(){}
+    public Artist(){
+        this.Awards = new ArrayList<>();
+    }
     public Artist(String id, String name, String address, String birthdate, String bio, ArrayList<String> occupations, ArrayList<String> genres,
                   ArrayList<String> awards) {
         this.id = id;
@@ -373,6 +375,7 @@ public class Artist {
             }
         }while (!checkID);
 
+        System.out.println("Name: " + searchArtist.getName());
         System.out.print("Enter new artist name: ");
         String newName = details.nextLine();
         searchArtist.setName(newName);
@@ -380,6 +383,7 @@ public class Artist {
         //updating address
         String newAddress;
         boolean checkAdress;
+        System.out.println("Address: "+ searchArtist.getAddress());
         do {
             System.out.print("Enter new Address (City|State|Country): ");
             newAddress = details.nextLine();
@@ -394,8 +398,9 @@ public class Artist {
         //updating birthdate
         String newBirthdate;
         boolean checkBirthdate;
+        System.out.println("Birthdate: "+ searchArtist.getBirthdate());
         do {
-            System.out.print("Enter artist birthdate (DD-MM-YYYY): ");
+            System.out.print("Enter new artist birthdate (DD-MM-YYYY): ");
             newBirthdate = details.nextLine();
             checkBirthdate = Artist.checkBirthDate(newBirthdate);
             if (!checkBirthdate){
@@ -408,8 +413,9 @@ public class Artist {
         //updating Bio
         String newBio;
         boolean checkBio;
+        System.out.println("Bio: "+ searchArtist.getBio());
         do {
-            System.out.print("Enter Artist Bio: ");
+            System.out.print("Enter new Artist Bio: ");
             newBio = details.nextLine();
             checkBio = Artist.checkBio(newBio);
             if(!checkBio){
@@ -431,7 +437,7 @@ public class Artist {
                 System.out.println("Occupation cannot be changed");
             }else {
                 do {
-                    System.out.print("Enter Artist Occupations (Ex: Singer|Songwriter): ");
+                    System.out.print("Enter new Artist Occupations (Ex: Singer|Songwriter): ");
                     newOccupations = new ArrayList<>(Arrays.asList(details.nextLine()));
                     checkOccupations = Artist.checkOccupations(newOccupations);
                     if (!checkOccupations){
@@ -462,10 +468,31 @@ public class Artist {
         }while (!checkGenres);
 
         //updating awards
-        ArrayList<String> updatedAwardsArray;
+        ArrayList<String> updatedAwardsArray = new ArrayList<>();
         boolean checkAwards;
         String newAwardsString;
+        System.out.println(searchArtist.getAwards());
         for(String award1 : searchArtist.getAwards()){
+            String[] firstPart = award1.split(",");
+            //System.out.println(Arrays.toString(firstPart));
+            for(int i = 0; i < firstPart.length; i++){
+                String[] secondPart = firstPart[i].split("\\|");
+                System.out.println(Arrays.toString(secondPart));
+                int year = Integer.parseInt(secondPart[0].trim());
+                if(year < 2000) {
+                    System.out.println("This award cannot be changed");
+                }else {
+                    System.out.print("Enter new title: ");
+                    secondPart[1] = details.nextLine();
+
+                    firstPart[i] = secondPart[0]+"|"+secondPart[1];
+                }
+            }
+            newAwardsString = String.join(",",firstPart);
+            updatedAwardsArray.add(newAwardsString);
+        }
+        searchArtist.setAwards(updatedAwardsArray);
+        /*for(String award1 : searchArtist.getAwards()){
             String[] firstPart = award1.split(",");
             System.out.println(Arrays.toString(firstPart));
             for(String award2 : firstPart){
@@ -479,7 +506,7 @@ public class Artist {
                     secondPart[1] = details.nextLine();
                 }
             }
-        }
+        }*/
         Artist.writeFile();
         return true;
     }

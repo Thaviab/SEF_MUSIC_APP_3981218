@@ -15,7 +15,7 @@ class ArtistTest {
 
     @Test
     void addArtistTest() {
-        String testData = "569MMMRR_%\n"+"Test\n"+"Mel|Vic|Aus\n"+
+        String testData = "569MMMRR_*\n"+"Test\n"+"Mel|Vic|Aus\n"+
                 "02-10-1998\n"+"Test case is a very young talented singer with many awards\n"+
                 "Singer|Writer\n"+"pop|classical\n"+"2022|Best pop composer Australia\n";
         InputStream stdin = System.in;
