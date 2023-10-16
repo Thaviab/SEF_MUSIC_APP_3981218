@@ -34,11 +34,32 @@ public class Main {
                         }
                         break;
                     case 2:
-                        if(Artist.updateArtist()){
+/*                        System.out.print("Enter artist id to update: ");
+                        String searchId = new Scanner(System.in).nextLine();
+                        System.out.println("Enter new artist ID: ");
+                        String newID = new Scanner(System.in).nextLine();
+                        System.out.print("Enter artist's new name: ");
+                        String newName = new Scanner(System.in).nextLine();
+                        System.out.print("Enter artist's new address");
+                        String newAddress = new Scanner(System.in).nextLine();
+                        System.out.print("Enter artist's new birthdate: ");
+                        String newBirthdate = new Scanner(System.in).nextLine();
+                        System.out.println("Enter artist's new bio: ");
+                        String newBio = new Scanner(System.in).nextLine();
+                        System.out.print("Enter artist's new occupations: ");
+                        ArrayList<String> newOccupations = new ArrayList<>(Arrays.asList(new Scanner(System.in).nextLine()));
+                        System.out.print("Enter artist's new genres: ");
+                        String newGenres = new Scanner(System.in).nextLine();
+                        System.out.print("Enter artist's new award title: ");
+                        String newAwards = new Scanner(System.in).nextLine();
+
+                        if(Artist.updateArtist(searchId,newID,newName,newAddress,newBirthdate,newBio,newOccupations,newGenres,newAwards)){
                             System.out.println("Artist updated sucessfully");
                         }else {
                             System.out.println("Artist update failed");
-                        }break;
+                        }*/
+                        System.out.println("Checking");
+                        break;
                     case 3:
                         Artist.displayAllArtists();break;
                     case 4: System.out.println("Thanks for using Social Media Analyzer");break;

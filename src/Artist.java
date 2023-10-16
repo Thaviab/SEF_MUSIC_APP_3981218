@@ -14,8 +14,9 @@ public class Artist {
     private ArrayList<String> Awards;
 
     public static ArrayList<Artist> artistsList = new ArrayList<>();
+    private Scanner input;
     public Artist(){
-        this.Awards = new ArrayList<>();
+        this.input = new Scanner(System.in);
     }
     public Artist(String id, String name, String address, String birthdate, String bio, ArrayList<String> occupations, ArrayList<String> genres,
                   ArrayList<String> awards) {
@@ -301,7 +302,8 @@ public class Artist {
     }*/
 
     public static void loadArtistFromFile() {
-        String path = "D:\\RMIT\\Sem 2\\SEF\\Assignment\\4\\SEF_MUSIC_APP\\resources\\SEF_Music.txt";
+        String pathSet = "D:\\RMIT\\Sem 2\\SEF\\Assignment\\41";
+        String path = pathSet+"SEF_MUSIC_APP\\resources\\SEF_Music.txt";
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String record;
             while ((record = reader.readLine()) != null) {
@@ -343,7 +345,10 @@ public class Artist {
         }
     }
 
-    public static boolean updateArtist() {
+    //*****Initially i coded to take inputs from the user through main.java file. Because, the assignment was unclear whether i need the user input
+    //since it mentioned the program should run in a console. below commented code is the code i used to get user inputs. main.java file was also
+    //altered later by commenting the option 2.
+/*    public static boolean updateArtist() {
         Scanner details = new Scanner(System.in);
         System.out.print("Enter the Artist ID to update: ");
         String id = new Scanner(System.in).nextLine();
@@ -492,21 +497,116 @@ public class Artist {
             updatedAwardsArray.add(newAwardsString);
         }
         searchArtist.setAwards(updatedAwardsArray);
-        /*for(String award1 : searchArtist.getAwards()){
-            String[] firstPart = award1.split(",");
-            System.out.println(Arrays.toString(firstPart));
-            for(String award2 : firstPart){
-                String[] secondPart = award2.split("\\|");
-                System.out.println(Arrays.toString(secondPart));
-                int year = Integer.parseInt(secondPart[0].trim());
-                if(year<2000){
-                    System.out.println("This award cannot be updated");
-                }else {
-                    System.out.print("Enter new title: ");
-                    secondPart[1] = details.nextLine();
+
+        Artist.writeFile();
+        return true;
+    }*/
+    public static Artist searchForArtist(String id){
+        for (Artist artist : artistsList){
+            if(artist.getId().equals(id)){
+                return artist;
+            }
+        }
+        return null;
+    }
+    public static boolean updateArtistID(Artist artist, String newId){
+        if(Artist.checkArtistID(newId)){
+            artist.setId(newId);
+            return true;
+        }
+        return false;
+    }
+    public static boolean updateArtistName(Artist artist, String newName){
+        artist.setName(newName);
+        return true;
+    }
+    public static boolean updateArtistAddress(Artist artist, String newAddress){
+        if(Artist.checkAddress(newAddress)){
+            artist.setAddress(newAddress);
+            return true;
+        }
+        return false;
+    }
+    public static boolean updateArtistBirthdate(Artist artist, String newBirthdate){
+        if(Artist.checkBirthDate(newBirthdate)){
+            artist.setBirthdate(newBirthdate);
+            return true;
+        }
+        return false;
+    }
+    public static boolean updateArtistBio(Artist artist, String newBio){
+        if(Artist.checkBio(newBio)){
+            artist.setBio(newBio);
+            return true;
+        }
+        return false;
+    }
+    public static boolean updateArtistOccupations(Artist artist, ArrayList<String> newOccupations) throws ParseException{
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        Date birthdate = format.parse(artist.getBirthdate());
+        Date year = format.parse("01-01-2000");
+        if(!birthdate.before(year) && Artist.checkOccupations(newOccupations)){
+            artist.setOccupations(newOccupations);
+            return true;
+        }
+        return false;
+    }
+    public static boolean updateArtistGenres(Artist artist, String newGenreString){
+        if(Artist.checkGenres(newGenreString)){
+            ArrayList<String> newGenres = new ArrayList<>(Arrays.asList(newGenreString.split("\\|")));
+            artist.setGenres(newGenres);
+            return true;
+        }
+        return false;
+    }
+    public static ArrayList<String> updateArtistAwards(Artist artist, String newTitle){
+        ArrayList<String> updatedAwardsArray = new ArrayList<>();
+        for(String award : artist.getAwards()){
+            String[] parts = award.split(",");
+            for (int i = 0; i < parts.length; i++){
+                String[] awardData = parts[i].split("\\|");
+                int year = Integer.parseInt(awardData[0].trim());
+                if(year>2000){
+                    awardData[1] = newTitle;
+                    parts[i] = awardData[0] + "|" + awardData[1];
                 }
             }
-        }*/
+            updatedAwardsArray.add(String.join(",",parts));
+        }
+        artist.setAwards(updatedAwardsArray);
+        return updatedAwardsArray;
+    }
+    public static boolean updateArtist(String searchId, String newId, String newName, String newAddress, String newBirthdate, String newBio,
+                                       ArrayList<String> newOccupations, String newGenres, String newAwards) throws ParseException {
+        Artist searchArtist = searchForArtist(searchId);
+        if(searchArtist == null){
+            System.out.println("Artist with ID" + searchId + "not in the system");
+            return false;
+        }
+        System.out.println("Updating Artist with ID" + searchId);
+
+        boolean isUpdated;
+        isUpdated = updateArtistID(searchArtist,newId);
+        if(!isUpdated)return false;
+
+        isUpdated = updateArtistAddress(searchArtist,newAddress);
+        if (!isUpdated)return false;
+
+        isUpdated = updateArtistBirthdate(searchArtist,newBirthdate);
+        if(!isUpdated)return false;
+
+        isUpdated = updateArtistBio(searchArtist,newBio);
+        if(!isUpdated)return false;
+
+        isUpdated = updateArtistOccupations(searchArtist, newOccupations);
+        if(!isUpdated)return false;
+
+        isUpdated = updateArtistGenres(searchArtist, newGenres);
+        if(!isUpdated)return false;
+
+        ArrayList<String> newAwardsAdded = updateArtistAwards(searchArtist,newAwards);
+        searchArtist.setAwards(newAwardsAdded);
+
         Artist.writeFile();
         return true;
     }

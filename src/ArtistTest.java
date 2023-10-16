@@ -1,16 +1,35 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArtistTest {
+    private Artist testArtist1;
+    private Artist testArtist2;
 
+    @BeforeEach
     public void setup(){
+        ArrayList<String> occupations = new ArrayList<>(Arrays.asList("Singer", "Composer"));
+        ArrayList<String> genres = new ArrayList<>(Arrays.asList("Pop"));
+        ArrayList<String> awards;
+        awards = new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia"));
+
+        testArtist1 = new Artist("569MMMRR_^","Test1","T1|T1|T1","10-10-2000","Test1 is very matured and talented singer with many awards",
+                occupations,genres,awards);
+        testArtist2 = new Artist("569MMMRR_#","Test2","T2|T2|T2","10-10-1998","Test2 is very matured and talented singer with many awards",
+                occupations,genres,awards);
+
         Artist.artistsList = new ArrayList<>();
+        Artist.artistsList.add(testArtist1);
+        Artist.artistsList.add(testArtist2);
+
     }
 
     @Test
@@ -83,7 +102,47 @@ class ArtistTest {
         assertFalse(Artist.checkGenres("pop"));
         assertFalse(Artist.checkGenres("pop|classical|jazz|techno|house|baila"));
     }
+
+
     @Test
-    void updateArtist() {
+    void searchArtistTest(){
+        Artist searchArtist = Artist.searchForArtist("569MMMRR_^");
+        assertEquals("569MMMRR_^", searchArtist.getId());
+    }
+
+    @Test
+    void updateArtistID(){
+        assertTrue(Artist.updateArtistID(testArtist1,"569MMMRR_^"));
+        assertEquals("569MMMRR_^",testArtist1.getId());
+        assertFalse(Artist.updateArtistID(testArtist1,"569mmmRR_^"));
+    }
+    @Test
+    void updateArtistAddressTest(){
+        assertTrue(Artist.updateArtistAddress(testArtist1,"Mel|Vic|Aus"));
+        assertEquals("Mel|Vic|Aus",testArtist1.getAddress());
+    }
+
+    @Test
+    void updateArtistBirthdateTest(){
+        assertTrue(Artist.updateArtistBirthdate(testArtist1,"12-10-1998"));
+        assertEquals("12-10-1998",testArtist1.getBirthdate());
+    }
+    @Test
+    void updateArtistBioTest(){
+        assertTrue(Artist.updateArtistBio(testArtist1,"A globally recognized artist with many awards under his name"));
+        assertEquals("A globally recognized artist with many awards under his name",testArtist1.getBio());
+    }
+
+    @Test
+    void updateArtistOccupationsTest() throws ParseException {
+        ArrayList<String> newOccupations = new ArrayList<>(Arrays.asList("Singer","Composer"));
+        assertTrue(Artist.updateArtistOccupations(testArtist1,newOccupations));
+        assertEquals(newOccupations,testArtist1.getOccupations());
+    }
+    @Test
+    void updateArtistGenresTest(){
+        assertTrue(Artist.updateArtistGenres(testArtist1,"Rock|Jazz"));
+        ArrayList<String> expectedGenres = new ArrayList<>(Arrays.asList("Rock","Jazz"));
+        assertEquals(expectedGenres,testArtist1.getGenres());
     }
 }

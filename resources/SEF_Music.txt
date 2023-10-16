@@ -1,2 +1,3 @@
-569MMMRR_#, Test1, M|M|M, 10-02-2000, Test1 is very matured and talented singer with many awards, S|S, P|P, 2022|Best pop composer Australia
-569MMMRR_^, Testcase1, T1|T1|T1, 10-11-1998, testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1 testcase1, TT|TT, P1|P1, 2023|testcase1 testcase1 testcase1 testcase1, 2022|testcase2 testcase2 testcase2 testcase2
+569MMMRR_^, Test1, T1|T1|T1, 10-10-2000, Test1 is very matured and talented singer with many awards, Singer|Composer, Pop, 2010|Best Singer award Australia,2015|Best Album award Australia
+569MMMRR_#, Test2, T2|T2|T2, 10-10-1998, Test2 is very matured and talented singer with many awards, Singer|Composer, Pop, 2010|Best Singer award Australia,2015|Best Album award Australia
+569MMMRR_*, Test, Mel|Vic|Aus, 02-10-1998, Test case is a very young talented singer with many awards, Singer|Writer, pop|classical, 2022|Best pop composer Australia
