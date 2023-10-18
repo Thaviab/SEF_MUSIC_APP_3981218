@@ -1,148 +1,324 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArtistTest {
     private Artist testArtist1;
     private Artist testArtist2;
+    private Artist testArtist3;
 
     @BeforeEach
-    public void setup(){
-        ArrayList<String> occupations = new ArrayList<>(Arrays.asList("Singer", "Composer"));
-        ArrayList<String> genres = new ArrayList<>(Arrays.asList("Pop"));
-        ArrayList<String> awards;
-        awards = new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia"));
-
-        testArtist1 = new Artist("569MMMRR_^","Test1","T1|T1|T1","10-10-2000","Test1 is very matured and talented singer with many awards",
-                occupations,genres,awards);
-        testArtist2 = new Artist("569MMMRR_#","Test2","T2|T2|T2","10-10-1998","Test2 is very matured and talented singer with many awards",
-                occupations,genres,awards);
-
-        Artist.artistsList = new ArrayList<>();
-        Artist.artistsList.add(testArtist1);
-        Artist.artistsList.add(testArtist2);
+    void intialize(){
+        testArtist1 = new Artist();
 
     }
+    //---------------------------Testing addArtist--------------------------//
 
+    //testing addArtist with all valid inputs
     @Test
-    void addArtistTest() {
-        String testData = "569MMMRR_*\n"+"Test\n"+"Mel|Vic|Aus\n"+
-                "02-10-1998\n"+"Test case is a very young talented singer with many awards\n"+
-                "Singer|Writer\n"+"pop|classical\n"+"2022|Best pop composer Australia\n";
-        InputStream stdin = System.in;
-        try {
-            System.setIn(new ByteArrayInputStream(testData.getBytes()));
-            int count = Artist.artistsList.size();
-            assertTrue(Artist.addArtist());
-            //checks whether the artist is added to the list
-            assertEquals(count+1,Artist.artistsList.size());
-        }finally {
-            System.setIn(stdin);
-        }
+    void addArtist_validTest(){
+        //Test Data 1
+        Artist artist1 = new Artist("569MMMRR_^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        int count = Artist.artistsList.size();
+        assertTrue(artist1.addArtist(artist1));
+        //checks whether the artist is added to the list
+        assertEquals(count+1,Artist.artistsList.size());
+
+        //Test Data 2
+        Artist artist2 = new Artist("569MMMRR_^","Test Artist2","Mel|Vic|Aus","10-10-2000",
+                "Test Artist2 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        count = Artist.artistsList.size();
+        assertTrue(artist2.addArtist(artist2));
+        //checks whether the artist is added to the list
+        assertEquals(count+1,Artist.artistsList.size());
     }
 
+    //testing addArtist with invalid id
     @Test
-    void checkArtistIDTest() {
-        assertTrue(Artist.checkArtistID("569MMMRR_%")); //True
-        assertFalse(Artist.checkArtistID("169MMMRR_%")); //True
-        assertFalse(Artist.checkArtistID("569mmmRR_%")); //True
-        assertFalse(Artist.checkArtistID("569MMMRR_1")); //True
+    void addArtist_IdTest(){
+        //Test Data 1
+        Artist artist1 = new Artist("569MMMRR_1","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        //Test Data 2
+        Artist artist2 = new Artist("169MMmRR_#","Test Artist2","Mel|Vic|Aus","10-10-2000",
+                "Test Artist2 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        assertFalse(artist1.addArtist(artist1)); //in valid id 569MMMRR_1
+        assertFalse(artist2.addArtist(artist2)); //invalid id 169MMmRR_#
     }
 
+    //testing addArtist with invalid address
     @Test
-    void checkBirthDateTest() {
-        assertTrue(Artist.checkBirthDate("12-10-1998"));
-        assertFalse(Artist.checkBirthDate("1998-10-09"));
-        assertFalse(Artist.checkBirthDate("09-1998-10"));
-        assertFalse(Artist.checkBirthDate("12-23-98"));
+    void addArtist_AddressTest(){
+
+        //Test Data1
+        Artist artist1 = new Artist("569MMMRR_!","Test Artist1","Mel|Vic|Aus|3145","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        //Test Data 2
+        Artist artist2 = new Artist("169MMmRR_#","Test Artist2","Mel|Vic","10-10-2000",
+                "Test Artist2 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        assertFalse(artist1.addArtist(artist1)); //invalid address Mel|Vic|Aus|3145
+        assertFalse(artist2.addArtist(artist2)); //invalid address Mel|Vic
     }
 
+    //testing addArtist with invalid birthdate
     @Test
-    void checkAddressTest() {
-        assertTrue(Artist.checkAddress("MEL|VIC|Aus"));
-        assertFalse(Artist.checkAddress("MEL,VIC,Aus"));
-        assertFalse(Artist.checkAddress("Mel|VIC|3145|Aus"));
+    void addArtist_brithdateTest(){
+        //Test Data1
+        Artist artist1 = new Artist("569MMMRR_!","Test Artist1","Mel|Vic|Aus","2001-10-11",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        //Test Data 2
+        Artist artist2 = new Artist("169MMmRR_#","Test Artist2","Mel|Vic|Aus","10-2001-10",
+                "Test Artist2 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        assertFalse(artist1.addArtist(artist1)); //invalid birthdate 2001-10-11
+        assertFalse(artist2.addArtist(artist2)); //invalid birthdate 10-2001-10
     }
 
+    //testing addArtist with invalid bio
     @Test
-    void checkBioTest() {
-        assertTrue(Artist.checkBio("A sample bio to check the junit test of checkBio() in Artist"));
-        assertFalse(Artist.checkBio("A sample bio to check the junit test of checkBio() in Artist with words more than 30 30 30 30 30 30 30 30 30" +
-                "30 30 30 30 30 30 30 30 30 30 30 30 30"));
-        assertFalse(Artist.checkBio("A sample short bio"));
+    void addArtist_BioTest(){
+        //Test Data1
+        Artist artist1 = new Artist("569MMMRR_!","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is a talented singer",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        //Test Data 2
+        Artist artist2 = new Artist("169MMmRR_#","Test Artist2","Mel|Vic|Aus","10-10-2000",
+                "Test Artist2 is very matured and talented singer with many awards. His performance is consistent. He has been " +
+                        "able to continue is parents legacy throughout his career. He has also showed his talent in various sports.",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        assertFalse(artist1.addArtist(artist1)); //bio less than 10 words
+        assertFalse(artist2.addArtist(artist2)); //bio greater than 30 words
     }
 
+    //testing addArtist with invalid occupation conditions
     @Test
-    void checkOccupationsTest() {
-        assertTrue(Artist.checkOccupations(new ArrayList<>(Arrays.asList("Singer|Songwriter"))));
-        assertFalse(Artist.checkOccupations(new ArrayList<>(Arrays.asList())));
-        assertFalse(Artist.checkOccupations(new ArrayList<>(Arrays.asList("Singer|Songwriter|Composer|Musician|Beatboxer|Rapper"))));
+    void addartist_OccupationTest(){
+        //Test Data1
+        Artist artist1 = new Artist("569MMMRR_!","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList()),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        //Test Data 2
+        Artist artist2 = new Artist("169MMmRR_#","Test Artist2","Mel|Vic|Aus","10-10-2000",
+                "Test Artist2 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer", "Musician", "Gutarist", "Dancer", "Scientist")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+
+        assertFalse(artist1.addArtist(artist1));
+        assertFalse(artist2.addArtist(artist2));
     }
 
+//---------------------------Test updateArtist--------------------------//
+
+    //testing updateArtist with invalid new id
     @Test
-    void checkAwardsTest() {
-        assertTrue(Artist.checkAwards("2023|Best award for young talent"));
-        assertTrue(Artist.checkAwards("2023|Best award for young talent, 2023|Best composer of the year"));
-        assertFalse(Artist.checkAwards("2023|Best music award"));
-        assertFalse(Artist.checkAwards("2023|Best music award, 2022|Best music award"));
+    void updateArtist_newIDTest() throws ParseException {
+
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR12","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRRmr","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //id wrong format 569MMMRR12
+        assertFalse(result2); ////id wrong format 569MMMRRmr
     }
 
+    //testing new artist address conditions with invalid address
     @Test
-    void checkGenresTest() {
-        assertTrue(Artist.checkGenres("pop|classical"));
-        assertFalse(Artist.checkGenres("pop|rock"));
-        assertFalse(Artist.checkGenres("pop"));
-        assertFalse(Artist.checkGenres("pop|classical|jazz|techno|house|baila"));
+    void updateArtist_newAddressTest() throws ParseException {
+
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR&&","Test Artist1","Mel|Vic|Aus|3145","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        //adding artist2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRR%%","Test Artist1","Mel|Vic","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //wrong address format Mel|Vic|Aus|3145
+        assertFalse(result2); ////wrong address format Mel|Vic
+    }
+
+    //testing new artist birthdate with conditions
+    @Test
+    void updateArtist_newBirthdateTest() throws ParseException {
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR&&","Test Artist1","Mel|Vic|Aus","2000-10-11",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        //adding artist2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRR%%","Test Artist1","Mel|Vic|Aus","11-2000-09",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //wrong birthdate format 2000-10-11
+        assertFalse(result2); //wrong birthdate format 11-2000-09
+
+    }
+
+    //testing new artist's bio with conditions
+    @Test
+    void updateArtist_newBioTest() throws ParseException {
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR&&","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured singer",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        //adding artist2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRR%%","Test Artist1","Mel|Vic","11-2000-09",
+                "Test Artist1 is very matured and talented singer with many awards. His performance is consistent. He has been " +
+                        "able to continue is parents legacy throughout his career. He has also showed his talent in various sports.",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("Pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //bio less than 10 words
+        assertFalse(result2); //bio more than 30 words
+    }
+
+    //testing new artist's occupations with invalid occupations
+    @Test
+    void updateArtist_newOccupationsTest() throws ParseException {
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR!@","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList()),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Aust\"Singer\", \"Composer\", \"Musician\",\"Gutarist\",\"Dancer\",\"Scientist\"ralia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRR@!","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer", "Musician","Gutarist","Dancer","Scientist")),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //no occupation
+        assertFalse(result2); //six occupations
+    }
+
+    //testing new artist's genres with conditions
+    @Test
+    void updateArtist_newGenresTest() throws ParseException {
+
+        //TEST DATA 1
+        //adding artist1
+        Artist artist1 = new Artist("569MMMRR^^","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist1.addArtist(artist1);
+        Artist.loadArtistFromFile();
+
+        boolean result1 = artist1.updateArtist("569MMMRR^^", "569MMMRR!!","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop","rock")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        //TEST DATA 2
+        Artist artist2 = new Artist("569MMMRR$$","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop","jazz")),new ArrayList<>(Arrays.asList("2010|Best Singer award Australia", "2015|Best Album award Australia")));
+        artist2.addArtist(artist2);
+        Artist.loadArtistFromFile();
+
+        boolean result2 = artist2.updateArtist("569MMMRR$$", "569MMMRR_!","Test Artist1","Mel|Vic|Aus","10-10-2000",
+                "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
+                new ArrayList<>(Arrays.asList("pop")),new ArrayList<>(Arrays.asList("Best Singer award Australia", "Best Album award Australia")));
+
+        assertFalse(result1); //pop and rock
+        assertFalse(result2); //one genre
     }
 
 
-    @Test
-    void searchArtistTest(){
-        Artist searchArtist = Artist.searchForArtist("569MMMRR_^");
-        assertEquals("569MMMRR_^", searchArtist.getId());
-    }
-
-    @Test
-    void updateArtistID(){
-        assertTrue(Artist.updateArtistID(testArtist1,"569MMMRR_^"));
-        assertEquals("569MMMRR_^",testArtist1.getId());
-        assertFalse(Artist.updateArtistID(testArtist1,"569mmmRR_^"));
-    }
-    @Test
-    void updateArtistAddressTest(){
-        assertTrue(Artist.updateArtistAddress(testArtist1,"Mel|Vic|Aus"));
-        assertEquals("Mel|Vic|Aus",testArtist1.getAddress());
-    }
-
-    @Test
-    void updateArtistBirthdateTest(){
-        assertTrue(Artist.updateArtistBirthdate(testArtist1,"12-10-1998"));
-        assertEquals("12-10-1998",testArtist1.getBirthdate());
-    }
-    @Test
-    void updateArtistBioTest(){
-        assertTrue(Artist.updateArtistBio(testArtist1,"A globally recognized artist with many awards under his name"));
-        assertEquals("A globally recognized artist with many awards under his name",testArtist1.getBio());
-    }
-
-    @Test
-    void updateArtistOccupationsTest() throws ParseException {
-        ArrayList<String> newOccupations = new ArrayList<>(Arrays.asList("Singer","Composer"));
-        assertTrue(Artist.updateArtistOccupations(testArtist1,newOccupations));
-        assertEquals(newOccupations,testArtist1.getOccupations());
-    }
-    @Test
-    void updateArtistGenresTest(){
-        assertTrue(Artist.updateArtistGenres(testArtist1,"Rock|Jazz"));
-        ArrayList<String> expectedGenres = new ArrayList<>(Arrays.asList("Rock","Jazz"));
-        assertEquals(expectedGenres,testArtist1.getGenres());
-    }
 }
