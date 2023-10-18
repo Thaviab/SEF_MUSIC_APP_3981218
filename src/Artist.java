@@ -234,6 +234,7 @@ public class Artist {
     }
 
     public static void loadArtistFromFile(){
+        artistsList.clear();
         String path = Artist.pathInitialized;
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String record;
