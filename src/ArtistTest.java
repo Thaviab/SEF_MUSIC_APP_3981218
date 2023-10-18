@@ -162,6 +162,7 @@ class ArtistTest {
     @Test
     @Order(8)
     void updateArtist_newIDTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR12","Update Artist1.1","Mel|Vic|Aus","10-10-2000",
                 "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
@@ -180,6 +181,7 @@ class ArtistTest {
     @Test
     @Order(9)
     void updateArtist_newAddressTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR&&","Update Artist2.1","Mel|Vic|Aus|3145","10-10-2000",
                 "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
@@ -198,6 +200,7 @@ class ArtistTest {
     @Test
     @Order(10)
     void updateArtist_newBirthdateTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         //adding artist1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR&&","Update Artist3.1","Mel|Vic|Aus","2000-10-11",
@@ -218,6 +221,7 @@ class ArtistTest {
     @Test
     @Order(11)
     void updateArtist_newBioTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR&&","Update Artist4.1","Mel|Vic|Aus","10-10-2000",
                 "Test Artist1 is very matured singer",new ArrayList<>(Arrays.asList("Singer", "Composer")),
@@ -237,6 +241,7 @@ class ArtistTest {
     @Test
     @Order(12)
     void updateArtist_newOccupationsTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR!@","Update Artist5.1","Mel|Vic|Aus","10-10-2000",
                 "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList()),
@@ -255,6 +260,7 @@ class ArtistTest {
     @Test
     @Order(13)
     void updateArtist_newGenresTest() throws ParseException {
+        Artist.loadArtistFromFile();
         //TEST DATA 1
         boolean result1 = testArtist1.updateArtist("569MMMRR@@", "569MMMRR!!","Update Artist6.1","Mel|Vic|Aus","10-10-2000",
                 "Test Artist1 is very matured and talented singer with many awards",new ArrayList<>(Arrays.asList("Singer", "Composer")),
